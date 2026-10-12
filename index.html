@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nathan Ashlee J. Cruz | BSIT Student &amp; Digital Marketplace Entrepreneur</title>
+<meta name="description" content="Portfolio and business hub of Nathan Ashlee J. Cruz, a 3rd-year BSIT student at Bulacan Agricultural State College who builds web apps, backend systems, and Discord automation, and runs a digital marketplace.">
+<meta name="theme-color" content="#11141f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nathan Ashlee J. Cruz | Portfolio &amp; Business Hub">
+<meta property="og:description" content="3rd-year BSIT student, web and backend builder, and digital marketplace entrepreneur. Explore the inventory, open the trade counter.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath fill='%230a0c14' d='M2 0h4v1h1v1h1v4H7v1H6v1H2V7H1V6H0V2h1V1h1z'/%3E%3Cpath fill='%23ffd700' d='M2 1h4v1h1v4H6v1H2V6H1V2h1z'/%3E%3Cpath fill='%23b8860b' d='M5 3h1v3H3v1h3V6h1V2z'/%3E%3Cpath fill='%23fff6a8' d='M2 2h1v2H2z'/%3E%3C/svg%3E">
+ 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+ 
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          pixel: ["'Press Start 2P'", 'monospace'],
+          ui: ['VT323', 'monospace'],
+          mono: ["'IBM Plex Mono'", 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+ 
+<style>
+  /* =====================================================================
+     TOKENS
+     ===================================================================== */
+  :root {
+    --bg0: #11141f;
+    --bg1: #181d2d;
+    --stone0: #232a3f;
+    --stone1: #2f3752;
+    --stone2: #44506f;
+    --wood: #8B5A2B;
+    --wood-d: #5c3a21;
+    --wood-dd: #3d2615;
+    --wood-l: #b07a42;
+    --gold: #ffd700;
+    --gold-d: #b8860b;
+    --green: #4caf50;
+    --green-d: #2e7d32;
+    --mana: #3f7bff;
+    --life: #e53935;
+    --torch: #ff9800;
+    --ink: #0a0c14;
+    --cream: #f6e7c8;
+    --cream-dim: #d9c7a0;
+    --text: #d7dcf0;
+    --text-dim: #9aa6c6;
+  }
+ 
+  /* =====================================================================
+     BASE
+     ===================================================================== */
+  html { scroll-behavior: smooth; }
+  html body {
+    margin: 0;
+    padding: 84px 0 132px;
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    background-color: var(--bg0);
+    background-image: linear-gradient(180deg, #1b2540 0, #181d2d 14%, #11141f 40%, #0d101a 75%, #0a0c14 100%);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* faint stone texture over the whole page (tile injected by JS) */
+  html body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1;
+    background-image: var(--tile-stone, none);
+    background-size: 128px 128px;
+    image-rendering: pixelated;
+    opacity: .16;
+    pointer-events: none;
+  }
+  ::selection { background: var(--gold); color: var(--ink); }
+ 
+  :focus-visible { outline: 3px dashed var(--gold); outline-offset: 4px; }
+ 
+  .skip {
+    position: fixed; left: 12px; top: -80px; z-index: 100;
+    background: var(--gold); color: var(--ink);
+    font-family: 'Press Start 2P', monospace; font-size: 11px; padding: 12px 14px;
+  }
+  .skip:focus { top: 76px; }
+ 
+  .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 18px; }
+  @media (min-width: 640px) { .wrap { padding: 0 28px; } }
+ 
+  .sec { padding: 56px 0 40px; scroll-margin-top: 72px; }
+ 
+  canvas[data-sprite], canvas.spr {
+    display: block; flex-shrink: 0;
+    width: calc(var(--c, 8) * var(--s, 4) * 1px);
+    height: calc(var(--r, 8) * var(--s, 4) * 1px);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+  }
+ 
+  /* =====================================================================
+     PIXEL UI KIT
+     ===================================================================== */
+  /* Double-line pixel border: notched outer ink line (box-shadow) + inner line (::after) */
+  .px {
+    position: relative;
+    box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 var(--hi, rgba(255,255,255,.14)),
+      inset -4px -4px 0 0 var(--lo, rgba(0,0,0,.38));
+  }
+  .px::after {
+    content: ""; position: absolute; inset: 9px;
+    border: 2px solid var(--line, rgba(255,255,255,.12));
+    pointer-events: none;
+  }
+  .px-wood {
+    color: var(--cream);
+    background-color: var(--wood-d);
+    background-image: var(--tile-wood, none);
+    background-size: 128px 128px;
+    image-rendering: pixelated;
+    --hi: rgba(255, 200, 120, .22);
+    --line: rgba(255, 214, 140, .26);
+  }
+  .px-stone {
+    color: var(--text);
+    background-color: var(--bg1);
+    background-image: var(--tile-stone, none);
+    background-size: 128px 128px;
+    image-rendering: pixelated;
+    --line: rgba(154, 166, 198, .26);
+  }
+  .panel { padding: 26px 22px; }
+  @media (min-width: 640px) { .panel { padding: 32px 32px; } }
+ 
+  .h-ui { font-family: 'VT323', monospace; font-weight: 400; line-height: 1; letter-spacing: .02em; }
+  .h-pix { font-family: 'Press Start 2P', monospace; font-weight: 400; line-height: 1.6; }
+ 
+  /* Hanging wooden sign for section headings */
+  .sec-head { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin: 26px 0 34px; }
+  .sign {
+    position: relative; display: inline-block;
+    margin: 0;
+    padding: 14px 22px 13px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(12px, 2.6vw, 17px);
+    line-height: 1.5; font-weight: 400;
+    color: #fff2cf;
+    text-shadow: 3px 3px 0 var(--wood-dd);
+    background-color: var(--wood);
+    background-image: var(--tile-wood-l, none);
+    background-size: 128px 128px;
+    image-rendering: pixelated;
+    box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 rgba(255, 220, 160, .3), inset -4px -4px 0 0 rgba(0,0,0,.32);
+  }
+  .sign::before, .sign::after {
+    content: ""; position: absolute; top: -22px; width: 4px; height: 18px;
+    background: repeating-linear-gradient(180deg, #9aa3b8 0 4px, #4a5266 4px 8px);
+  }
+  .sign::before { left: 18px; }
+  .sign::after { right: 18px; }
+  .sec-sub { margin: 0; font-family: 'VT323', monospace; font-size: 24px; line-height: 1.1; color: var(--text-dim); max-width: 46ch; }
+ 
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 15px 20px 14px;
+    font-family: 'Press Start 2P', monospace; font-size: 11px; line-height: 1.4; text-align: center;
+    color: #2a1a08; background: var(--gold); border: 0; cursor: pointer;
+    text-decoration: none;
+    box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 rgba(255,255,255,.5), inset -4px -4px 0 0 var(--gold-d);
+  }
+  .btn:hover { background: #ffe55c; }
+  .btn:active { transform: translateY(4px); box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 var(--gold-d), inset -4px -4px 0 0 rgba(255,255,255,.35); }
+  .btn[disabled] { opacity: .6; cursor: not-allowed; transform: none; }
+  .btn-wood { color: var(--cream); background: var(--wood); box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 rgba(255,220,160,.35), inset -4px -4px 0 0 rgba(0,0,0,.4); }
+  .btn-wood:hover { background: var(--wood-l); }
+  .btn-green { color: #07200a; background: var(--green); box-shadow:
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink), 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      inset 4px 4px 0 0 rgba(255,255,255,.4), inset -4px -4px 0 0 var(--green-d); }
+  .btn-green:hover { background: #66bb6a; }
+ 
+  /* Inventory slot */
+  .slot {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    background: #242d4d; border: 0; padding: 0; color: var(--text); cursor: pointer;
+    box-shadow:
+      -3px 0 0 0 #070912, 3px 0 0 0 #070912, 0 -3px 0 0 #070912, 0 3px 0 0 #070912,
+      inset 3px 3px 0 0 rgba(255,255,255,.14), inset -3px -3px 0 0 rgba(0,0,0,.45);
+    transition: background-color .08s steps(2);
+  }
+  .slot:hover { background: #2f3a63; }
+  .slot[aria-pressed="true"], .slot[aria-current="true"] {
+    outline: 3px solid var(--gold); outline-offset: 3px; background: #3b3a45;
+  }
+  .slot.empty { cursor: default; background: #1a2038; color: #48527a; }
+  .slot.empty:hover { background: #1a2038; }
+ 
+  /* =====================================================================
+     HUD (top bar)
+     ===================================================================== */
+  .hud {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    height: 64px; padding: 0 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: #0c0e17;
+    border-bottom: 4px solid #000;
+    box-shadow: 0 4px 0 0 var(--stone1);
+  }
+  .hud-left { display: flex; flex-direction: column; gap: 4px; }
+  .hearts, .manas { display: flex; gap: 2px; }
+  .hearts canvas { --s: 2; }
+  .manas canvas { --s: 2; }
+  .hud-right { display: flex; align-items: center; gap: 10px; }
+  .hud-chip {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'VT323', monospace; font-size: 24px; line-height: 1; color: var(--gold);
+    padding: 6px 10px 5px; background: #151a2b;
+    box-shadow: -2px 0 0 0 #000, 2px 0 0 0 #000, 0 -2px 0 0 #000, 0 2px 0 0 #000, inset 0 0 0 2px #262e48;
+  }
+  .hud-chip canvas { --s: 3; }
+  .hud-depth { color: #9fc3ff; }
+  .hud-btn {
+    font-family: 'VT323', monospace; font-size: 22px; line-height: 1; color: var(--cream);
+    padding: 7px 10px 6px; background: var(--wood-d); border: 0; cursor: pointer;
+    box-shadow: -2px 0 0 0 #000, 2px 0 0 0 #000, 0 -2px 0 0 #000, 0 2px 0 0 #000, inset 2px 2px 0 0 rgba(255,200,120,.3), inset -2px -2px 0 0 rgba(0,0,0,.4);
+  }
+  .hud-btn[aria-pressed="false"] { color: #8c7b5c; text-decoration: line-through; }
+  @media (max-width: 639px) { .hud-depth { display: none; } }
+  @media (max-width: 479px) {
+    .hearts canvas:nth-child(n+7) { display: none; }
+    .manas canvas:nth-child(n+4) { display: none; }
+    .hud { padding: 0 10px; }
+  }
+ 
+  /* =====================================================================
+     HOTBAR (section nav)
+     ===================================================================== */
+  .hotbar {
+    position: fixed; left: 50%; z-index: 60;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: flex; gap: 8px; padding: 9px;
+    background: #0e1220;
+  }
+  .hotbar::after { inset: 4px; }
+  .hotbar-label {
+    position: absolute; left: 50%; bottom: calc(100% + 14px); transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: 'VT323', monospace; font-size: 24px; line-height: 1; color: var(--gold);
+    text-shadow: 2px 2px 0 #000;
+    padding: 0 4px;
+    pointer-events: none;
+  }
+  .hb { width: 44px; height: 44px; text-decoration: none; }
+  .hb canvas { --s: 3; }
+  .hb .key {
+    position: absolute; left: 4px; top: 1px;
+    font-family: 'VT323', monospace; font-size: 15px; line-height: 1; color: #aeb8d8; text-shadow: 1px 1px 0 #000;
+  }
+  @media (min-width: 640px) {
+    .hb { width: 54px; height: 54px; }
+    .hb canvas { --s: 4; }
+  }
+ 
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; z-index: 70;
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+    max-width: min(92vw, 460px);
+    padding: 10px 18px 9px;
+    font-family: 'VT323', monospace; font-size: 24px; line-height: 1.1; color: var(--gold); text-align: center;
+    background: var(--bg1);
+    opacity: 0; transform: translate(-50%, 10px); pointer-events: none;
+    transition: opacity .18s steps(3), transform .18s steps(3);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast::after { inset: 4px; }
+ 
+  /* =====================================================================
+     HERO
+     ===================================================================== */
+  .stage {
+    position: relative; height: 100%; min-height: 380px; overflow: hidden;
+    background-color: #131a2e;
+    background-image: linear-gradient(180deg, #1a2440 0%, #131a2e 55%, #0e1222 100%);
+  }
+  .stage::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: var(--tile-stone, none); background-size: 96px 96px; image-rendering: pixelated; opacity: .28;
+  }
+  .stage > * { position: absolute; }
+  .stage::after { z-index: 5; }
+  .ground {
+    left: 0; right: 0; bottom: 0; height: 76px; z-index: 2;
+    background-color: #5b3d20;
+    background-image: var(--tile-grass, none), var(--tile-dirt, none);
+    background-repeat: repeat-x, repeat;
+    background-position: left top, left top;
+    background-size: 64px 16px, 64px 64px;
+    image-rendering: pixelated;
+  }
+  .torch { left: 10%; top: 24%; z-index: 1; }
+  .torch canvas { --s: 6; animation: flick .7s steps(1) infinite; }
+  .torch-glow {
+    position: absolute; left: -90px; top: -80px; width: 240px; height: 240px; z-index: -1;
+    background: radial-gradient(circle, rgba(255,152,0,.34) 0, rgba(255,152,0,.12) 38%, transparent 68%);
+    animation: glow 1.4s steps(2) infinite;
+  }
+  @keyframes flick { 0% { filter: brightness(1); } 33% { filter: brightness(1.25); } 66% { filter: brightness(.9); } }
+  @keyframes glow { 0%,100% { opacity: 1; } 50% { opacity: .78; } }
+ 
+  .char-wrap { left: 50%; bottom: 72px; z-index: 3; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+  .char-wrap canvas { --s: 9; }
+  .nameplate {
+    position: relative; margin-bottom: 12px; padding: 6px 12px 5px;
+    font-family: 'VT323', monospace; font-size: 22px; line-height: 1; color: #fff2cf; white-space: nowrap;
+    background: var(--wood);
+    box-shadow: -3px 0 0 0 var(--ink), 3px 0 0 0 var(--ink), 0 -3px 0 0 var(--ink), 0 3px 0 0 var(--ink), inset 3px 3px 0 0 rgba(255,220,160,.3), inset -3px -3px 0 0 rgba(0,0,0,.35);
+  }
+  @media (min-width: 640px) { .char-wrap canvas { --s: 11; } .stage { min-height: 460px; } }
+ 
+  .slime {
+    left: 74%; bottom: 72px; z-index: 3; background: none; border: 0; padding: 0; cursor: pointer;
+    transform-origin: 50% 100%;
+    animation: hop 2.8s steps(14) infinite;
+  }
+  .slime canvas { --s: 6; }
+  @keyframes hop {
+    0%, 55% { transform: translateY(0) scale(1, 1); }
+    62% { transform: translateY(0) scale(1.12, .86); }
+    74% { transform: translateY(-46px) scale(.92, 1.1); }
+    88% { transform: translateY(0) scale(1.14, .84); }
+    100% { transform: translateY(0) scale(1, 1); }
+  }
+  .slime.boing { animation: boing .5s steps(8) 1; }
+  @keyframes boing { 0% { transform: translateY(0) scale(1.2,.8); } 50% { transform: translateY(-70px) scale(.9,1.15); } 100% { transform: translateY(0) scale(1,1); } }
+ 
+  .float { z-index: 2; animation: bob 2.6s steps(6) infinite; }
+  .float canvas { --s: 5; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+ 
+  /* Collectible coin */
+  .coin {
+    position: relative; z-index: 4; display: inline-block; background: none; border: 0; padding: 4px; cursor: pointer;
+    animation: bob 1.6s steps(6) infinite;
+  }
+  .stage .coin { position: absolute; }
+  .coin canvas { --s: 4; animation: spin 1.4s steps(8) infinite; }
+  @keyframes spin { 0%,100% { transform: scaleX(1); } 25% { transform: scaleX(.5); } 50% { transform: scaleX(.12); } 75% { transform: scaleX(.5); } }
+  .coin.taken { visibility: hidden; }
+ 
+  /* Character panel */
+  .lv {
+    display: inline-block; padding: 6px 10px 5px; margin-right: 10px;
+    font-family: 'Press Start 2P', monospace; font-size: 11px; line-height: 1.4; color: var(--ink); background: var(--gold);
+    box-shadow: -3px 0 0 0 var(--ink), 3px 0 0 0 var(--ink), 0 -3px 0 0 var(--ink), 0 3px 0 0 var(--ink), inset 3px 3px 0 0 rgba(255,255,255,.5), inset -3px -3px 0 0 var(--gold-d);
+    vertical-align: middle;
+  }
+  .hero-name {
+    margin: 14px 0 0; font-family: 'Press Start 2P', monospace; font-weight: 400;
+    font-size: clamp(19px, 4.6vw, 33px); line-height: 1.5; color: #fff2cf;
+    text-shadow: 4px 4px 0 var(--wood-dd);
+    overflow-wrap: anywhere;
+  }
+  .hero-class { margin: 12px 0 0; font-family: 'VT323', monospace; font-size: 27px; line-height: 1.1; color: var(--gold); max-width: 40ch; }
+  .status {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 16px;
+    font-family: 'VT323', monospace; font-size: 22px; line-height: 1.1; color: var(--cream);
+    padding: 7px 12px 6px; background: rgba(10,12,20,.55);
+    box-shadow: -2px 0 0 0 #000, 2px 0 0 0 #000, 0 -2px 0 0 #000, 0 2px 0 0 #000;
+  }
+  .dot { width: 12px; height: 12px; background: var(--green); box-shadow: 0 0 0 2px #0b2a0e, 0 0 10px 1px rgba(76,175,80,.8); animation: pulse 1.6s steps(2) infinite; }
+  @keyframes pulse { 50% { opacity: .45; } }
+ 
+  .bars { display: grid; gap: 16px; margin-top: 26px; }
+  .bar { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 6px 12px; }
+  .bar .lbl, .bar .val { font-family: 'VT323', monospace; font-size: 24px; line-height: 1; }
+  .bar .lbl { color: var(--cream); }
+  .bar .val { color: var(--gold); }
+  .segs {
+    grid-column: 1 / -1; display: grid; grid-template-columns: repeat(20, 1fr); gap: 2px; padding: 4px; background: #0a0c14;
+    box-shadow: -2px 0 0 0 #000, 2px 0 0 0 #000, 0 -2px 0 0 #000, 0 2px 0 0 #000, inset 0 0 0 2px #2a3045;
+  }
+  .seg { height: 16px; background: #1b2033; }
+  .seg.on { animation: segfill 1ms steps(1) forwards; animation-delay: calc(650ms + var(--i) * 45ms); }
+  @keyframes segfill { to { background: var(--c); box-shadow: inset 0 4px 0 rgba(255,255,255,.32), inset 0 -4px 0 rgba(0,0,0,.25); } }
+  .fine { margin: 14px 0 0; font-size: 12px; line-height: 1.5; color: var(--cream-dim); }
+ 
+  /* =====================================================================
+     LORE
+     ===================================================================== */
+  .portrait { padding: 10px; background: #1a2038; box-shadow: -3px 0 0 0 #070912, 3px 0 0 0 #070912, 0 -3px 0 0 #070912, 0 3px 0 0 #070912, inset 3px 3px 0 0 rgba(255,255,255,.12), inset -3px -3px 0 0 rgba(0,0,0,.45); }
+  .portrait canvas { --s: 8; }
+  .prose p { margin: 0 0 14px; max-width: 62ch; }
+  .prose p:last-child { margin-bottom: 0; }
+  .quest { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-top: 2px dashed rgba(154,166,198,.25); }
+  .quest:first-of-type { border-top: 0; padding-top: 0; }
+  .quest .pip { width: 14px; height: 14px; margin-top: 6px; flex-shrink: 0; background: var(--green); box-shadow: 0 0 0 2px #0b2a0e, inset 3px 3px 0 rgba(255,255,255,.35); }
+  .quest b { display: block; font-family: 'VT323', monospace; font-weight: 400; font-size: 24px; line-height: 1.05; color: #fff; }
+  .quest span { font-size: 13px; line-height: 1.55; color: var(--text-dim); }
+  .facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: 13px; }
+  .facts dt { font-family: 'VT323', monospace; font-size: 22px; line-height: 1.1; color: var(--gold); }
+  .facts dd { margin: 0; color: var(--text); line-height: 1.5; padding-top: 2px; }
+ 
+  /* =====================================================================
+     MARKETPLACE
+     ===================================================================== */
+  .card-title { margin: 0; font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: 12px; line-height: 1.6; color: #fff; }
+  .card-copy { margin: 10px 0 0; font-size: 13px; line-height: 1.65; color: var(--text-dim); }
+  .wood-copy { color: var(--cream-dim); }
+  .sub-title { margin: 0 0 14px; font-family: 'VT323', monospace; font-weight: 400; font-size: 30px; line-height: 1; color: var(--gold); }
+ 
+  .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .pay { cursor: default; flex-direction: column; gap: 6px; padding: 12px 4px 10px; aspect-ratio: 1 / 1; text-align: center; }
+  .pay .ab { font-family: 'Press Start 2P', monospace; font-size: 13px; line-height: 1; color: var(--c); text-shadow: 3px 3px 0 #000; }
+  .pay .nm { font-family: 'VT323', monospace; font-size: 20px; line-height: 1; color: var(--cream); }
+  .pay:hover { background: #242d4d; }
+ 
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .chip {
+    font-family: 'VT323', monospace; font-size: 20px; line-height: 1; color: var(--cream); padding: 6px 10px 5px;
+    background: rgba(10,12,20,.55);
+    box-shadow: -2px 0 0 0 #000, 2px 0 0 0 #000, 0 -2px 0 0 #000, 0 2px 0 0 #000;
+  }
+  .chip::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--green); }
+ 
+  .console {
+    margin-top: 18px; height: 236px; overflow-y: auto; padding: 14px 16px;
+    font-size: 12.5px; line-height: 1.55; color: #cfd6ee; background: #070912;
+    box-shadow: -3px 0 0 0 #000, 3px 0 0 0 #000, 0 -3px 0 0 #000, 0 3px 0 0 #000, inset 0 0 0 3px #232b47;
+  }
+  .ln { margin: 0 0 6px; overflow-wrap: anywhere; }
+  .who { display: inline-block; margin-right: 8px; padding: 0 6px; font-family: 'VT323', monospace; font-size: 18px; line-height: 1.2; color: #07090f; }
+  .who-customer { background: var(--gold); }
+  .who-bot { background: var(--green); }
+  .who-staff { background: #7db4ff; }
+  .console .idle { color: #6b7699; }
+  .console-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 18px; }
+  .console-bar small { font-family: 'VT323', monospace; font-size: 20px; color: var(--text-dim); line-height: 1.1; }
+ 
+  .route { display: grid; gap: 22px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  @media (min-width: 768px) { .route { grid-template-columns: repeat(4, 1fr); } }
+  .route li { padding: 22px 18px; }
+  .route .n { font-family: 'Press Start 2P', monospace; font-size: 22px; line-height: 1; color: var(--gold); text-shadow: 3px 3px 0 #000; }
+  .route h4 { margin: 14px 0 0; font-family: 'VT323', monospace; font-weight: 400; font-size: 27px; line-height: 1; color: #fff; }
+  .route p { margin: 8px 0 0; font-size: 13px; line-height: 1.6; color: var(--text-dim); }
+ 
+  /* =====================================================================
+     INVENTORY
+     ===================================================================== */
+  .filters { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 22px; }
+  .filter {
+    font-family: 'VT323', monospace; font-size: 22px; line-height: 1; color: var(--cream);
+    padding: 8px 14px 7px; background: var(--wood-d); border: 0; cursor: pointer;
+    box-shadow: -3px 0 0 0 #000, 3px 0 0 0 #000, 0 -3px 0 0 #000, 0 3px 0 0 #000, inset 3px 3px 0 0 rgba(255,200,120,.3), inset -3px -3px 0 0 rgba(0,0,0,.4);
+  }
+  .filter[aria-pressed="true"] { color: var(--ink); background: var(--gold); box-shadow: -3px 0 0 0 #000, 3px 0 0 0 #000, 0 -3px 0 0 #000, 0 3px 0 0 #000, inset 3px 3px 0 0 rgba(255,255,255,.5), inset -3px -3px 0 0 var(--gold-d); }
+ 
+  .grid-inv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 4px; list-style: none; }
+  @media (min-width: 480px) { .grid-inv { gap: 14px; } }
+  @media (min-width: 640px) { .grid-inv { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .grid-inv { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .grid-inv .slot { width: 100%; aspect-ratio: 1 / 1; }
+  .item .ab { font-family: 'Press Start 2P', monospace; line-height: 1; color: var(--c); text-shadow: 3px 3px 0 #000; }
+  .item .cat-pip { position: absolute; left: 6px; bottom: 6px; width: 8px; height: 8px; background: var(--c); }
+  .item.dim { opacity: .28; }
+  .item.dim:hover, .item.dim[aria-pressed="true"] { opacity: .9; }
+  .grid-inv .empty .ab { font-family: 'Press Start 2P', monospace; font-size: 18px; color: #48527a; }
+ 
+  .info-name { margin: 0; font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: clamp(15px, 3vw, 20px); line-height: 1.5; color: var(--c, #fff); text-shadow: 3px 3px 0 #000; }
+  .info-cat { margin: 6px 0 0; font-family: 'VT323', monospace; font-size: 24px; line-height: 1; color: var(--c, #fff); }
+  .info-desc { margin: 16px 0 0; font-size: 14px; line-height: 1.7; color: var(--text); }
+  .uses { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .uses li { display: flex; gap: 10px; align-items: baseline; font-size: 13px; line-height: 1.5; color: var(--text); }
+  .uses li::before { content: ""; width: 8px; height: 8px; flex-shrink: 0; background: var(--green); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 22px 0 0; padding: 0; list-style: none; font-family: 'VT323', monospace; font-size: 20px; line-height: 1.1; color: var(--text-dim); }
+  .legend i { display: inline-block; width: 10px; height: 10px; margin-right: 8px; background: var(--c); }
+ 
+  /* =====================================================================
+     CONTACT
+     ===================================================================== */
+  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .tile { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; text-decoration: none; text-align: left; }
+  .tile .ab { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Press Start 2P', monospace; font-size: 12px; color: var(--c); text-shadow: 2px 2px 0 #000; background: #151b33; box-shadow: inset 0 0 0 2px #2a3358; }
+  .tile .nm { font-family: 'VT323', monospace; font-size: 22px; line-height: 1; color: var(--cream); overflow-wrap: anywhere; }
+  .handle { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 18px; padding: 14px; background: #070912; box-shadow: -3px 0 0 #000, 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, inset 0 0 0 3px #232b47; }
+  .handle code { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #fff; overflow-wrap: anywhere; }
+  .handle .btn { padding: 11px 14px 10px; font-size: 10px; }
+ 
+  .field { display: block; margin-bottom: 18px; }
+  .field > span { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: 'VT323', monospace; font-size: 24px; line-height: 1; color: var(--cream); }
+  .field em { font-style: normal; color: var(--cream-dim); font-size: 20px; }
+  .input {
+    display: block; width: 100%; padding: 12px 14px; border: 0; border-radius: 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.5; color: #fff; background: #0a0c14;
+    box-shadow: -3px 0 0 #000, 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, inset 3px 3px 0 0 rgba(0,0,0,.6), inset 0 0 0 3px #2a3045;
+  }
+  .input::placeholder { color: #66708f; }
+  .input:focus { outline: 3px solid var(--gold); outline-offset: 3px; }
+  select.input { appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+    background-image: linear-gradient(135deg, transparent 50%, var(--gold) 50%), linear-gradient(225deg, transparent 50%, var(--gold) 50%);
+    background-size: 8px 8px; background-position: right 20px top 20px, right 12px top 20px; background-repeat: no-repeat; }
+  textarea.input { min-height: 150px; resize: vertical; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .form-status { min-height: 28px; margin: 16px 0 0; font-family: 'VT323', monospace; font-size: 24px; line-height: 1.1; color: var(--gold); }
+  .form-status.err { color: #ff8a80; }
+ 
+  .foot { margin-top: 56px; padding: 40px 0 8px; text-align: center; }
+  .strata { height: 32px; background-color: #1d2338; background-image: var(--tile-strata, none); background-size: 256px 32px; background-repeat: repeat-x; image-rendering: pixelated; box-shadow: 0 -4px 0 #000, 0 4px 0 #000; }
+  .foot p { margin: 0 0 8px; font-size: 13px; color: var(--text-dim); }
+  .foot .hint { font-family: 'VT323', monospace; font-size: 22px; color: var(--cream-dim); }
+ 
+  /* =====================================================================
+     MOTION PREFERENCES
+     ===================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .seg.on { background: var(--c) !important; box-shadow: inset 0 4px 0 rgba(255,255,255,.32), inset 0 -4px 0 rgba(0,0,0,.25) !important; }
+  }
+</style>
+</head>
+ 
+<body>
+<a class="skip" href="#main">Skip to content</a>
+ 
+<!-- ============================ HUD ============================ -->
+<header class="hud">
+  <div class="hud-left">
+    <div class="hearts" id="hearts" role="img" aria-label="Life: full"></div>
+    <div class="manas" id="manas" aria-hidden="true"></div>
+  </div>
+  <div class="hud-right">
+    <div class="hud-chip" title="Coins collected">
+      <canvas data-sprite="coin" aria-hidden="true"></canvas>
+      <span id="coinCount" aria-live="off">0</span>
+    </div>
+    <div class="hud-chip hud-depth" id="depth" title="Depth meter">0 ft Surface</div>
+    <button type="button" class="hud-btn" id="sfxToggle" aria-pressed="true" data-sfx="none">SFX on</button>
+  </div>
+</header>
+ 
+<main id="main">
+ 
+  <!-- ============================ 1. CHARACTER / HERO ============================ -->
+  <section id="stats" class="sec" aria-labelledby="hero-title" style="padding-top:24px">
+    <div class="wrap grid gap-10 lg:grid-cols-12 items-stretch">
+ 
+      <div class="lg:col-span-5">
+        <div class="stage px">
+          <div class="torch">
+            <div class="torch-glow"></div>
+            <canvas data-sprite="torch" aria-hidden="true"></canvas>
+          </div>
+ 
+          <div class="float" style="right:14%; top:16%"><canvas data-sprite="gem" aria-hidden="true"></canvas></div>
+          <div class="float" style="left:16%; top:58%; animation-delay:-1.2s"><canvas data-sprite="gem" data-pal="green" aria-hidden="true"></canvas></div>
+ 
+          <button type="button" class="coin" style="left:34%; top:12%" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+          <button type="button" class="coin" style="right:30%; top:38%; animation-delay:-.6s" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+          <button type="button" class="coin" style="left:12%; top:36%; animation-delay:-1s" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+ 
+          <div class="char-wrap">
+            <div class="nameplate">Nathan</div>
+            <canvas data-sprite="char" aria-hidden="true"></canvas>
+          </div>
+ 
+          <button type="button" class="slime" id="slime" aria-label="Poke the slime" data-sfx="none"><canvas data-sprite="slime" aria-hidden="true"></canvas></button>
+ 
+          <div class="ground" aria-hidden="true"></div>
+        </div>
+      </div>
+ 
+      <div class="lg:col-span-7">
+        <div class="px px-wood panel h-full">
+          <div>
+            <span class="lv">Lv. 3</span><span class="h-ui" style="font-size:24px;color:var(--cream-dim)">Character stats</span>
+          </div>
+          <h1 class="hero-name" id="hero-title">Nathan Ashlee J. Cruz</h1>
+          <p class="hero-class">Class: 3rd-Year BSIT Student &amp; Digital Marketplace Entrepreneur</p>
+          <div class="status"><span class="dot" aria-hidden="true"></span>Online: taking trades and new projects</div>
+ 
+          <div class="bars" id="bars" aria-label="Character stats"></div>
+          <p class="fine">Self-rated, for fun. The Tech Inventory below shows what I actually use.</p>
+ 
+          <div class="flex flex-wrap gap-5 mt-8">
+            <a class="btn" href="#trade" data-goto="trade">Open trade counter</a>
+            <a class="btn btn-wood" href="#inventory" data-goto="inventory">Browse inventory</a>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+  </section>
+ 
+  <!-- ============================ 2. LORE / ABOUT ============================ -->
+  <section id="lore" class="sec" aria-labelledby="lore-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sign" id="lore-title">Lore</h2>
+        <p class="sec-sub">Where I study, what I build, and how the shop began.</p>
+        <button type="button" class="coin" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+      </div>
+ 
+      <div class="grid gap-8 lg:grid-cols-12">
+        <article class="lg:col-span-7 px px-wood panel">
+          <div class="flex gap-5 items-start flex-col sm:flex-row">
+            <div class="portrait"><canvas data-sprite="head" aria-hidden="true"></canvas></div>
+            <div class="prose">
+              <p>I'm a 3rd-year BSIT student at <strong>Bulacan Agricultural State College</strong>, and I spend most of my free time digging through code. Web apps, backend systems, and tech that runs itself are the main quest.</p>
+              <p>Alongside school I run a digital marketplace. Trading game currencies and items taught me things a classroom rarely does: how to move money safely, how to keep a community store online, and why automation beats doing it by hand.</p>
+              <p>I like projects where the front end looks good and the back end holds up when real people use it.</p>
+            </div>
+          </div>
+        </article>
+ 
+        <aside class="lg:col-span-5 px px-stone panel">
+          <h3 class="sub-title">Active quests</h3>
+          <div>
+            <div class="quest"><i class="pip" aria-hidden="true"></i><div><b>Build web apps</b><span>Responsive front ends backed by PHP, JavaScript, and MySQL.</span></div></div>
+            <div class="quest"><i class="pip" aria-hidden="true"></i><div><b>Engineer backend systems</b><span>Databases, APIs, and deployments that keep working.</span></div></div>
+            <div class="quest"><i class="pip" aria-hidden="true"></i><div><b>Automate the grind</b><span>Discord bots and scripts for stores and communities.</span></div></div>
+          </div>
+          <dl class="facts" style="margin-top:22px">
+            <dt>School</dt><dd>Bulacan Agricultural State College</dd>
+            <dt>Program</dt><dd>BS Information Technology, 3rd year</dd>
+            <dt>Focus</dt><dd>Web, backend, automation</dd>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============================ 3. MARKETPLACE ============================ -->
+  <section id="market" class="sec" aria-labelledby="market-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sign" id="market-title">Digital Marketplace &amp; Business Hub</h2>
+        <p class="sec-sub">Game currencies and items, paid for and delivered with a paper trail.</p>
+        <button type="button" class="coin" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+      </div>
+ 
+      <!-- Assets -->
+      <div class="grid gap-8 md:grid-cols-3">
+        <article class="px px-stone panel" style="padding:24px 22px">
+          <canvas data-sprite="gem" style="--s:6" aria-hidden="true"></canvas>
+          <h3 class="card-title" style="margin-top:16px">Pixel Worlds</h3>
+          <p class="card-copy">In-game currencies and items for Pixel Worlds players.</p>
+        </article>
+        <article class="px px-stone panel" style="padding:24px 22px">
+          <canvas data-sprite="coin" style="--s:6" aria-hidden="true"></canvas>
+          <h3 class="card-title" style="margin-top:16px">Growtopia</h3>
+          <p class="card-copy">Locks and in-game items, listed and sold through the Discord store.</p>
+        </article>
+        <article class="px px-stone panel" style="padding:24px 22px">
+          <canvas data-sprite="gem" data-pal="red" style="--s:6" aria-hidden="true"></canvas>
+          <h3 class="card-title" style="margin-top:16px">Roblox</h3>
+          <p class="card-copy">Robux and other game currencies, handled order by order.</p>
+        </article>
+      </div>
+ 
+      <!-- Payments + Discord -->
+      <div class="grid gap-8 lg:grid-cols-12 mt-10">
+        <article class="lg:col-span-5 px px-wood panel">
+          <h3 class="sub-title">Payment methods</h3>
+          <ul class="pay-grid" id="payGrid"></ul>
+          <p class="card-copy wood-copy" style="margin-top:20px">Each transfer is matched to the order amount and reference before anything is released.</p>
+        </article>
+ 
+        <article class="lg:col-span-7 px px-stone panel">
+          <h3 class="sub-title">Discord stores &amp; bot control</h3>
+          <p class="card-copy" style="margin-top:0;max-width:60ch">Community stores run inside Discord. Bots open order tickets, post stock, log payments, and send receipts, so orders move without anyone copy-pasting between apps.</p>
+          <ul class="chips">
+            <li class="chip">Order tickets</li>
+            <li class="chip">Stock boards</li>
+            <li class="chip">Payment logs</li>
+            <li class="chip">Roles &amp; access</li>
+            <li class="chip">Auto receipts</li>
+          </ul>
+          <div class="console" id="console" role="log" aria-live="polite" aria-label="Sample Discord order flow">
+            <p class="ln idle">Press "Run sample order" to watch a typical ticket from request to receipt.</p>
+          </div>
+          <div class="console-bar">
+            <button type="button" class="btn btn-green" id="runFlow">Run sample order</button>
+            <small>Sample flow, not a live store.</small>
+          </div>
+        </article>
+      </div>
+ 
+      <!-- Trade route -->
+      <h3 class="sub-title" style="margin:44px 0 18px">Trade route</h3>
+      <ol class="route">
+        <li class="px px-wood"><span class="n">1</span><h4>Choose</h4><p>Pick the game, item, and how you want to pay.</p></li>
+        <li class="px px-wood"><span class="n">2</span><h4>Open ticket</h4><p>A Discord ticket logs the order and the agreed price.</p></li>
+        <li class="px px-wood"><span class="n">3</span><h4>Pay &amp; verify</h4><p>Send payment with your receipt. It gets checked first.</p></li>
+        <li class="px px-wood"><span class="n">4</span><h4>Delivery</h4><p>Items are handed over and a receipt is posted.</p></li>
+      </ol>
+    </div>
+  </section>
+ 
+  <!-- ============================ 4. INVENTORY ============================ -->
+  <section id="inventory" class="sec" aria-labelledby="inv-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sign" id="inv-title">Tech Inventory</h2>
+        <p class="sec-sub">Pick a slot to read the item. Filter to dim the rest.</p>
+        <button type="button" class="coin" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+      </div>
+ 
+      <div class="filters" id="filters" role="group" aria-label="Filter inventory"></div>
+ 
+      <div class="grid gap-8 lg:grid-cols-12">
+        <aside class="order-first lg:order-last lg:col-span-5 px px-stone panel" aria-live="polite" id="info">
+          <!-- filled by JS -->
+        </aside>
+        <div class="lg:col-span-7 px px-wood panel">
+          <h3 class="sub-title">Chest</h3>
+          <ul class="grid-inv" id="inv"></ul>
+          <ul class="legend" id="legend"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============================ 5. CONTACT / TRADE COUNTER ============================ -->
+  <section id="trade" class="sec" aria-labelledby="trade-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sign" id="trade-title">Trade Counter</h2>
+        <p class="sec-sub">Want to trade, hire me, or talk shop? Leave a message.</p>
+        <button type="button" class="coin" aria-label="Collect a coin" data-sfx="none"><canvas data-sprite="coin" aria-hidden="true"></canvas></button>
+      </div>
+ 
+      <div class="grid gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-5 px px-stone panel">
+          <h3 class="sub-title">Find me</h3>
+          <ul class="tiles" id="socials"></ul>
+          <div class="handle">
+            <span class="h-ui" style="font-size:22px;color:var(--gold)">Discord</span>
+            <code id="handleText"></code>
+            <button type="button" class="btn btn-wood" id="copyHandle" data-sfx="none">Copy handle</button>
+          </div>
+        </div>
+ 
+        <form class="lg:col-span-7 px px-wood panel" id="contactForm" novalidate aria-label="Contact form">
+          <h3 class="sub-title">Message box</h3>
+          <div class="hp" aria-hidden="true"><label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
+ 
+          <label class="field"><span>Your name</span>
+            <input class="input" type="text" name="name" required maxlength="80" autocomplete="name" placeholder="Steve">
+          </label>
+          <label class="field"><span>Discord or email</span>
+            <input class="input" type="text" name="contact" required maxlength="120" autocomplete="email" placeholder="So I can reply">
+          </label>
+          <label class="field"><span>Topic</span>
+            <select class="input" name="topic">
+              <option>Trade inquiry</option>
+              <option>Web / backend project</option>
+              <option>Discord store or bot</option>
+              <option>Just saying hi</option>
+            </select>
+          </label>
+          <label class="field"><span>Message <em id="count">0/500</em></span>
+            <textarea class="input" name="message" required maxlength="500" placeholder="What are you looking for?"></textarea>
+          </label>
+ 
+          <button type="submit" class="btn" id="sendBtn">Send message</button>
+          <p class="form-status" id="formStatus" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+ 
+<footer class="foot">
+  <div class="strata" aria-hidden="true"></div>
+  <div class="wrap" style="padding-top:34px">
+    <p class="hint">Tip: press 1 to 5 to jump between sections.</p>
+    <p>&copy; <span id="year">2026</span> Nathan Ashlee J. Cruz. Built with HTML, CSS, and a lot of square pixels.</p>
+    <button type="button" class="btn btn-wood" id="toTop" style="margin-top:14px">Back to surface</button>
+  </div>
+</footer>
+ 
+<!-- ============================ HOTBAR ============================ -->
+<nav class="hotbar px" aria-label="Sections">
+  <span class="hotbar-label" id="hotbarLabel" aria-hidden="true">Character</span>
+  <a class="slot hb" href="#stats"     data-label="Character"      aria-label="Character stats (key 1)" aria-current="true"><span class="key">1</span><canvas data-sprite="sword" aria-hidden="true"></canvas></a>
+  <a class="slot hb" href="#lore"      data-label="Lore"           aria-label="Lore (key 2)"><span class="key">2</span><canvas data-sprite="book" aria-hidden="true"></canvas></a>
+  <a class="slot hb" href="#market"    data-label="Marketplace"    aria-label="Digital marketplace (key 3)"><span class="key">3</span><canvas data-sprite="bag" aria-hidden="true"></canvas></a>
+  <a class="slot hb" href="#inventory" data-label="Tech Inventory" aria-label="Tech inventory (key 4)"><span class="key">4</span><canvas data-sprite="chest" aria-hidden="true"></canvas></a>
+  <a class="slot hb" href="#trade"     data-label="Trade Counter"  aria-label="Trade counter (key 5)"><span class="key">5</span><canvas data-sprite="mail" aria-hidden="true"></canvas></a>
+</nav>
+ 
+<div class="toast px" id="toast" role="status" aria-live="polite"></div>
+ 
+<script>
+(() => {
+  'use strict';
+ 
+  /* =====================================================================
+     CONFIG: edit these before publishing
+     ===================================================================== */
+  const CONFIG = {
+    discordHandle: 'your_discord_handle',          // shown and copied on the Trade Counter
+    email: 'you@example.com',                      // mailto fallback for the contact form
+    formEndpoint: '',                              // optional: Formspree / Getform URL. If set, the form POSTs JSON here.
+    links: {                                       // leave a value empty ('') to hide that tile
+      discordInvite: 'https://discord.gg/your-invite',
+      github: 'https://github.com/your-username',
+      facebook: 'https://www.facebook.com/your-profile'
+    }
+  };
+ 
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ 
+  /*SPRITES-START*/
+  const PAL = {
+    k: '#0a0c14', g: '#ffd700', G: '#b8860b', y: '#fff6a8',
+    r: '#e53935', R: '#8e1b1b', p: '#ff8a80',
+    b: '#3f7bff', B: '#1d3d99', c: '#9fc3ff', f: '#ffffff',
+    w: '#8B5A2B', W: '#5c3a21', l: '#c68642',
+    s: '#9aa3b8', S: '#5b6478', m: '#e1e6f0',
+    n: '#4caf50', N: '#2e7d32', h: '#f1c27d', H: '#d9a066', d: '#3b2314',
+    o: '#ff9800'
+  };
+  const SWAP = {
+    green: { c: '#b9f6ca', b: '#4caf50', B: '#2e7d32', f: '#eafff0' },
+    red:   { c: '#ff8a80', b: '#e53935', B: '#8e1b1b', f: '#ffe5e3' }
+  };
+  const SPR = {
+    char: [
+      '....kkkkkkkk....',
+      '...kddddddddk...',
+      '...kddddddddk...',
+      '...kddhhhhddk...',
+      '...kdhhhhhhdk...',
+      '...khkhhhhkhk...',
+      '...khhhhhhhhk...',
+      '...khhhHHhhhk...',
+      '.....kHHHHk.....',
+      '..kknnnnnnnnkk..',
+      '.knnnnnnnnnnnnk.',
+      '.knnnnnggnnnnnk.',
+      '.khnnnnggnnnnhk.',
+      '.khhknnnnnnkhhk.',
+      '..kkknnnnnnkkk..',
+      '....kWWggWWk....',
+      '....kBBBBBBk....',
+      '....kBBBBBBk....',
+      '....kBBkkBBk....',
+      '....kBBkkBBk....',
+      '....kBBkkBBk....',
+      '...kWWWkkWWWk...',
+      '...kWWWkkWWWk...',
+      '...kkkkkkkkkk...'
+    ],
+    coin: [
+      '..kkkk..',
+      '.kyyggk.',
+      'kyggggGk',
+      'kygGGgGk',
+      'kyggGgGk',
+      'kggggGGk',
+      '.kGGGGk.',
+      '..kkkk..'
+    ],
+    gem: [
+      '..kkkk..',
+      '.kcccbk.',
+      'kcfcbbBk',
+      'kccbbbBk',
+      '.kcbbBk.',
+      '..kbBk..',
+      '...kk...',
+      '........'
+    ],
+    heart: [
+      '.kkk.kkk.',
+      'kpprkrrrk',
+      'kpprrrrRk',
+      'krrrrrrRk',
+      '.krrrrRk.',
+      '..krrRk..',
+      '...kRk...',
+      '....k....'
+    ],
+    crystal: [
+      '...k...',
+      '..kck..',
+      '.kcfbk.',
+      'kcbbbBk',
+      '.kbbBk.',
+      '..kBk..',
+      '...k...'
+    ],
+    slime: [
+      '....kkkk....',
+      '..kkbbbbkk..',
+      '.kbbcbbbbbk.',
+      '.kbcbbbbbbBk',
+      'kbbbbbbbbbbk',
+      'kbbkbbbbkbbk',
+      'kbbbbbbbbbBk',
+      'kBBBBBBBBBBk',
+      '.kkkkkkkkkk.'
+    ],
+    torch: [
+      '..oo..',
+      '.oyyo.',
+      '.oyyo.',
+      '..oo..',
+      '..kk..',
+      '..wW..',
+      '..wW..',
+      '..wW..',
+      '..wW..',
+      '..kk..'
+    ],
+    sword: [
+      '......ms',
+      '.....msS',
+      '....msS.',
+      '...msS..',
+      'g.msS...',
+      '.gmS....',
+      '.wg.....',
+      'w.w.....'
+    ],
+    book: [
+      '.kkkkkk.',
+      'kRRRRRRk',
+      'kRggggRk',
+      'kRRRRRRk',
+      'kRggggRk',
+      'kRRRRRRk',
+      'kffffffk',
+      '.kkkkkk.'
+    ],
+    bag: [
+      '..kwwk..',
+      '...kk...',
+      '..kllk..',
+      '.kllllk.',
+      'kllggllk',
+      'klgggglk',
+      'kllggllk',
+      '.kkkkkk.'
+    ],
+    chest: [
+      '.kkkkkk.',
+      'kwwwwwwk',
+      'kllllllk',
+      'kkkggkkk',
+      'kwwgGwwk',
+      'kwwwwwwk',
+      'kwwwwwwk',
+      '.kkkkkk.'
+    ],
+    mail: [
+      '........',
+      'kkkkkkkk',
+      'kmffffmk',
+      'kfmffmfk',
+      'kffmmffk',
+      'kffffffk',
+      'kkkkkkkk',
+      '........'
+    ]
+  };
+  SPR.head = SPR.char.slice(0, 9);
+  /*SPRITES-END*/
+ 
+  function drawSprite(canvas, name, swapName) {
+    const rows = SPR[name]; if (!rows) return;
+    const swap = swapName ? SWAP[swapName] : null;
+    const h = rows.length, w = rows[0].length;
+    canvas.width = w; canvas.height = h;
+    canvas.style.setProperty('--c', w);
+    canvas.style.setProperty('--r', h);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const ch = rows[y][x];
+        if (ch === '.') continue;
+        ctx.fillStyle = (swap && swap[ch]) || PAL[ch];
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+  }
+  function newSprite(name, swapName) {
+    const c = document.createElement('canvas');
+    c.setAttribute('data-sprite', name);
+    c.setAttribute('aria-hidden', 'true');
+    drawSprite(c, name, swapName);
+    return c;
+  }
+  $$('canvas[data-sprite]').forEach(c => drawSprite(c, c.dataset.sprite, c.dataset.pal));
+ 
+  /* =====================================================================
+     PROCEDURAL PIXEL TEXTURES (wood, stone, dirt, grass, ore strata)
+     ===================================================================== */
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function tile(w, h, paint) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d'); paint(x, w, h); return c.toDataURL('image/png');
+  }
+  function noise(x, w, h, colors, rand, weights) {
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const r = rand(); let k = 0, acc = 0;
+      for (; k < weights.length; k++) { acc += weights[k]; if (r < acc) break; }
+      x.fillStyle = colors[Math.min(k, colors.length - 1)]; x.fillRect(i, j, 1, 1);
+    }
+  }
+  function woodTile(base, a, b, seam, edge, seed) {
+    return tile(32, 32, (x, w, h) => {
+      const r = rng(seed);
+      noise(x, w, h, [base, a, b], r, [.7, .15]);
+      for (let p = 0; p < 4; p++) {
+        const y0 = p * 8;
+        x.fillStyle = seam; x.fillRect(0, y0 + 7, w, 1);
+        x.fillStyle = edge; x.fillRect(0, y0, w, 1);
+        const jx = (p * 13 + 7) % w;
+        x.fillStyle = seam; x.fillRect(jx, y0 + 1, 1, 6);
+        x.fillStyle = edge; x.fillRect((jx + 1) % w, y0 + 1, 1, 6);
+        for (let g = 0; g < 3; g++) {
+          const gx = Math.floor(r() * w), gy = y0 + 2 + Math.floor(r() * 4), gl = 3 + Math.floor(r() * 5);
+          x.fillStyle = seam; x.globalAlpha = .45; x.fillRect(gx, gy, gl, 1); x.globalAlpha = 1;
+        }
+      }
+    });
+  }
+  const root = document.documentElement.style;
+  const u = d => `url("${d}")`;
+  root.setProperty('--tile-wood',   u(woodTile('#5c3a21', '#553520', '#643f25', '#3d2615', '#6b4527', 11)));
+  root.setProperty('--tile-wood-l', u(woodTile('#8B5A2B', '#845327', '#94622f', '#5c3a21', '#a36f3a', 23)));
+  root.setProperty('--tile-stone',  u(tile(32, 32, (x, w, h) => noise(x, w, h, ['#1f2538', '#262d44', '#1a1f31', '#2d3550'], rng(5), [.5, .25, .15]))));
+  root.setProperty('--tile-dirt',   u(tile(16, 16, (x, w, h) => {
+    const r = rng(8); noise(x, w, h, ['#6b4423', '#7a4e28', '#5a3a1d', '#8a5a30'], r, [.45, .28, .17]);
+    for (let i = 0; i < 6; i++) { x.fillStyle = '#6f7487'; x.fillRect(Math.floor(r() * w), Math.floor(r() * h), 1, 1); }
+  })));
+  root.setProperty('--tile-grass',  u(tile(16, 4, (x, w, h) => {
+    const r = rng(3);
+    for (let i = 0; i < w; i++) {
+      const tall = r() > .45;
+      x.fillStyle = tall ? '#7ed67f' : '#4caf50'; if (tall || r() > .3) x.fillRect(i, 0, 1, 1);
+      x.fillStyle = '#4caf50'; x.fillRect(i, 1, 1, 1);
+      x.fillStyle = r() > .5 ? '#3b9440' : '#388e3c'; x.fillRect(i, 2, 1, 1);
+      x.fillStyle = '#2e7d32'; x.fillRect(i, 3, 1, 1);
+    }
+  })));
+  root.setProperty('--tile-strata', u(tile(64, 8, (x, w, h) => {
+    const r = rng(17);
+    noise(x, w, h, ['#1f2538', '#2a3250', '#171c2c', '#36416a'], r, [.45, .28, .15]);
+    [[9, 3], [41, 5]].forEach(([ox, oy]) => {
+      x.fillStyle = '#d4af37'; x.fillRect(ox, oy, 2, 1); x.fillRect(ox + 1, oy - 1, 1, 1); x.fillRect(ox - 1, oy + 1, 1, 1);
+      x.fillStyle = '#fff1a0'; x.fillRect(ox, oy, 1, 1);
+    });
+  })));
+ 
+  /* =====================================================================
+     SOUND (tiny WebAudio chiptune blips; unlocks after first interaction)
+     ===================================================================== */
+  const Sfx = (() => {
+    let ctx = null, on = true, unlocked = false, lastHover = 0;
+    try { on = localStorage.getItem('sfx') !== 'off'; } catch (e) {}
+    const unlock = () => { unlocked = true; };
+    ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, unlock, { once: true, passive: true }));
+ 
+    function ac() {
+      if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); }
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+    function tone(freq, dur = .08, type = 'square', vol = .05, delay = 0, slideTo = 0) {
+      if (!on || !unlocked) return;
+      const c = ac(); if (!c) return;
+      const t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .03);
+    }
+    return {
+      get on() { return on; },
+      set(v) { on = v; try { localStorage.setItem('sfx', v ? 'on' : 'off'); } catch (e) {} },
+      click()  { tone(520, .07, 'square', .05, 0, 800); },
+      select() { tone(660, .05, 'square', .045); tone(990, .08, 'square', .045, .05); },
+      hover()  { const n = performance.now(); if (n - lastHover < 70) return; lastHover = n; tone(340, .035, 'triangle', .02); },
+      coin()   { tone(988, .07, 'square', .055); tone(1319, .2, 'square', .055, .07); },
+      boing()  { tone(180, .28, 'sine', .09, 0, 560); },
+      tick()   { tone(620, .03, 'square', .025); },
+      error()  { tone(190, .18, 'sawtooth', .05, 0, 90); },
+      win()    { [523, 659, 784, 1047].forEach((f, i) => tone(f, .12, 'square', .05, i * .09)); }
+    };
+  })();
+ 
+  /* Delegated UI sounds */
+  document.addEventListener('click', e => {
+    const el = e.target.closest('button, a, .slot');
+    if (!el || el.dataset.sfx === 'none' || el.disabled) return;
+    Sfx.click();
+  });
+  document.addEventListener('pointerover', e => {
+    if (e.pointerType !== 'mouse') return;
+    const el = e.target.closest('button, a, .slot:not(.pay):not(.empty)');
+    if (el && !el.disabled) Sfx.hover();
+  });
+ 
+  /* =====================================================================
+     TOAST
+     ===================================================================== */
+  const toastEl = $('#toast'); let toastT;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), 2200);
+  }
+ 
+  /* =====================================================================
+     HUD: hearts, mana, coins, depth, sound toggle
+     ===================================================================== */
+  const hearts = $('#hearts'), manas = $('#manas');
+  for (let i = 0; i < 10; i++) hearts.appendChild(newSprite('heart'));
+  for (let i = 0; i < 6; i++) manas.appendChild(newSprite('crystal'));
+ 
+  let coins = 0;
+  const coinCount = $('#coinCount');
+  document.addEventListener('click', e => {
+    const c = e.target.closest('.coin'); if (!c || c.classList.contains('taken')) return;
+    c.classList.add('taken'); c.disabled = true;
+    coins++; coinCount.textContent = coins; Sfx.coin();
+    if (coins === 10) { toast('Treasure hunter! 10 coins found.'); Sfx.win(); }
+    setTimeout(() => { c.classList.remove('taken'); c.disabled = false; }, 6000);
+  });
+ 
+  const slime = $('#slime');
+  slime.addEventListener('click', () => {
+    Sfx.boing(); slime.classList.remove('boing'); void slime.offsetWidth; slime.classList.add('boing');
+    slime.addEventListener('animationend', () => slime.classList.remove('boing'), { once: true });
+  });
+ 
+  const sfxBtn = $('#sfxToggle');
+  function paintSfx() { sfxBtn.textContent = Sfx.on ? 'SFX on' : 'SFX off'; sfxBtn.setAttribute('aria-pressed', String(Sfx.on)); }
+  paintSfx();
+  sfxBtn.addEventListener('click', () => { Sfx.set(!Sfx.on); paintSfx(); if (Sfx.on) Sfx.select(); });
+ 
+  const depthEl = $('#depth'); let ticking = false;
+  function updateDepth() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    const layer = p < .1 ? 'Surface' : p < .45 ? 'Underground' : p < .85 ? 'Cavern' : 'Bedrock';
+    depthEl.textContent = `${Math.round(p * 1400)} ft ${layer}`;
+    ticking = false;
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(updateDepth); } }, { passive: true });
+  updateDepth();
+ 
+  /* =====================================================================
+     HOTBAR NAV + SCROLLSPY + KEYS
+     ===================================================================== */
+  const hbs = $$('.hb'), hbLabel = $('#hotbarLabel');
+  const ids = hbs.map(a => a.getAttribute('href').slice(1));
+  function setActive(id) {
+    hbs.forEach(a => {
+      const on = a.getAttribute('href') === '#' + id;
+      if (on) { a.setAttribute('aria-current', 'true'); hbLabel.textContent = a.dataset.label; }
+      else a.removeAttribute('aria-current');
+    });
+  }
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }),
+    { rootMargin: '-40% 0px -55% 0px' });
+  ids.forEach(id => io.observe(document.getElementById(id)));
+ 
+  function jump(id) {
+    const el = document.getElementById(id); if (!el) return;
+    el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  }
+  $$('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); jump(a.dataset.goto); }));
+  hbs.forEach(a => a.addEventListener('click', e => { e.preventDefault(); jump(a.getAttribute('href').slice(1)); }));
+  document.addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= ids.length) { Sfx.select(); jump(ids[n - 1]); }
+  });
+  $('#toTop').addEventListener('click', () => jump('stats'));
+ 
+  /* =====================================================================
+     STAT BARS (segmented, fill in sequence on load)
+     ===================================================================== */
+  const STATS = [
+    { label: 'Coding Proficiency', value: 78, color: '#4caf50' },
+    { label: 'Trading Volume',     value: 85, color: '#ffd700' },
+    { label: 'Automation',         value: 72, color: '#3f7bff' },
+    { label: 'Networking',         value: 60, color: '#ff9800' }
+  ];
+  const barsEl = $('#bars');
+  STATS.forEach(s => {
+    const filled = Math.round(s.value / 5);
+    const bar = document.createElement('div');
+    bar.className = 'bar'; bar.setAttribute('role', 'meter');
+    bar.setAttribute('aria-label', s.label);
+    bar.setAttribute('aria-valuemin', 0); bar.setAttribute('aria-valuemax', 100); bar.setAttribute('aria-valuenow', s.value);
+    let segs = '';
+    for (let i = 0; i < 20; i++) segs += `<i class="seg${i < filled ? ' on' : ''}" style="--i:${i};--c:${s.color}"></i>`;
+    bar.innerHTML = `<span class="lbl">${s.label}</span><span class="val">${s.value}/100</span><div class="segs" aria-hidden="true">${segs}</div>`;
+    barsEl.appendChild(bar);
+  });
+ 
+  /* =====================================================================
+     PAYMENT METHODS
+     ===================================================================== */
+  const PAYS = [
+    { ab: 'GC',  nm: 'GCash',    c: '#6fb4ff' },
+    { ab: 'GT',  nm: 'GoTyme',   c: '#ffd700' },
+    { ab: 'MB',  nm: 'MariBank', c: '#ffa94d' },
+    { ab: 'MY',  nm: 'Maya',     c: '#6fd16f' },
+    { ab: 'USDT', nm: 'Crypto / USDT', c: '#2fe0b0' },
+    { ab: '+',   nm: 'Ask for more', c: '#c1b0ff' }
+  ];
+  $('#payGrid').innerHTML = PAYS.map(p =>
+    `<li class="slot pay" style="--c:${p.c}"><span class="ab">${p.ab}</span><span class="nm">${p.nm}</span></li>`).join('');
+ 
+  /* =====================================================================
+     DISCORD BOT SAMPLE FLOW
+     ===================================================================== */
+  const FLOW = [
+    { who: 'customer', text: '/order item:Growtopia pay:GCash' },
+    { who: 'bot',      text: 'Ticket #0042 opened. Staff has been notified.' },
+    { who: 'bot',      text: 'Send the exact amount, then upload your receipt here.' },
+    { who: 'customer', text: '[receipt.png uploaded]' },
+    { who: 'bot',      text: 'Payment logged. Waiting for staff to confirm.' },
+    { who: 'staff',    text: 'Confirmed. Delivering now.' },
+    { who: 'bot',      text: 'Order complete. Receipt posted to #receipts.' }
+  ];
+  const con = $('#console'), runBtn = $('#runFlow'); let running = false;
+  function addLine(l) {
+    const p = document.createElement('p'); p.className = 'ln';
+    const label = l.who === 'customer' ? 'Customer' : l.who === 'bot' ? 'Store Bot' : 'Staff';
+    p.innerHTML = `<span class="who who-${l.who}">${label}</span>`;
+    p.appendChild(document.createTextNode(l.text));
+    con.appendChild(p); con.scrollTop = con.scrollHeight; Sfx.tick();
+  }
+  runBtn.addEventListener('click', () => {
+    if (running) return; running = true; runBtn.disabled = true; runBtn.textContent = 'Running...';
+    con.innerHTML = '';
+    FLOW.forEach((l, i) => setTimeout(() => {
+      addLine(l);
+      if (i === FLOW.length - 1) { running = false; runBtn.disabled = false; runBtn.textContent = 'Replay sample order'; }
+    }, RM ? 0 : 700 * (i + 1)));
+  });
+ 
+  /* =====================================================================
+     TECH INVENTORY
+     ===================================================================== */
+  const CATS = {
+    lang: { label: 'Language',   color: '#6fd16f' },
+    db:   { label: 'Database',   color: '#6fb4ff' },
+    tool: { label: 'Tool',       color: '#ffb347' },
+    net:  { label: 'Networking', color: '#ff8fc4' }
+  };
+  const ITEMS = [
+    { id: 'python',  name: 'Python',  abbr: 'Py',    cat: 'lang', desc: 'My go-to for scripts, automation, and Discord bot logic.', uses: ['Discord bots', 'Automation scripts', 'Quick prototypes'] },
+    { id: 'csharp',  name: 'C#',      abbr: 'C#',    cat: 'lang', desc: 'Object-oriented practice and desktop apps from coursework.', uses: ['Desktop applications', 'OOP fundamentals'] },
+    { id: 'php',     name: 'PHP',     abbr: 'PHP',   cat: 'lang', desc: 'Server-side pages and database-driven systems.', uses: ['CRUD web apps', 'Login and session handling', 'MySQL back ends'] },
+    { id: 'js',      name: 'JavaScript', abbr: 'JS', cat: 'lang', desc: 'Makes pages interactive, from forms to small games.', uses: ['Interactive UIs', 'Browser logic', 'Node tooling'] },
+    { id: 'htmlcss', name: 'HTML / CSS', abbr: '</>', cat: 'lang', desc: 'Semantic, responsive layouts. This page is built with them.', uses: ['Responsive layouts', 'Custom UI themes'] },
+    { id: 'mysql',   name: 'MySQL',   abbr: 'SQL',   cat: 'db',   desc: 'Relational data for web apps: tables, joins, and clean schemas.', uses: ['Web app storage', 'Reports and queries'] },
+    { id: 'mongo',   name: 'MongoDB', abbr: 'Mongo', cat: 'db',   desc: 'Flexible document storage for bots and fast-changing data.', uses: ['Bot data', 'Document-style records'] },
+    { id: 'git',     name: 'Git',     abbr: 'Git',   cat: 'tool', desc: 'Version control so every change can be tracked and undone.', uses: ['Branching and history', 'GitHub workflows'] },
+    { id: 'xampp',   name: 'XAMPP',   abbr: 'XAMPP', cat: 'tool', desc: 'Local Apache, PHP, and MySQL stack for building and testing.', uses: ['Local PHP development', 'Database testing'] },
+    { id: 'railway', name: 'Railway', abbr: 'Rail',  cat: 'tool', desc: 'Deploys apps and bots to the cloud without server babysitting.', uses: ['Hosting bots', 'Deploying web apps'] },
+    { id: 'cisco',   name: 'Cisco Packet Tracer', abbr: 'PT', cat: 'net', desc: 'Network simulation for routing, switching, and subnetting labs.', uses: ['Network design labs', 'Subnetting practice'] }
+  ];
+  const inv = $('#inv'), info = $('#info'), filtersEl = $('#filters'), legend = $('#legend');
+  const sizeFor = a => a.length <= 2 ? 20 : a.length === 3 ? 15 : a.length === 4 ? 11 : 10;
+ 
+  inv.innerHTML = ITEMS.map(it => {
+    const c = CATS[it.cat].color;
+    return `<li><button type="button" class="slot item" data-id="${it.id}" data-cat="${it.cat}" data-sfx="none" aria-pressed="false" aria-label="${it.name}, ${CATS[it.cat].label}" style="--c:${c}; width:100%; aspect-ratio:1/1">
+      <span class="ab" style="font-size:${sizeFor(it.abbr)}px">${it.abbr}</span><i class="cat-pip"></i></button></li>`;
+  }).join('') + `<li><div class="slot empty" aria-hidden="true" style="width:100%; aspect-ratio:1/1"><span class="ab">?</span></div></li>`;
+ 
+  legend.innerHTML = Object.values(CATS).map(c => `<li><i style="--c:${c.color}"></i>${c.label}</li>`).join('');
+ 
+  function showItem(id, quiet) {
+    const it = ITEMS.find(i => i.id === id); if (!it) return;
+    const cat = CATS[it.cat];
+    $$('.item', inv).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+    info.style.setProperty('--c', cat.color);
+    info.innerHTML = `
+      <h3 class="sub-title">Item info</h3>
+      <h4 class="info-name">${it.name}</h4>
+      <p class="info-cat">${cat.label}</p>
+      <p class="info-desc">${it.desc}</p>
+      <ul class="uses">${it.uses.map(u => `<li>${u}</li>`).join('')}</ul>`;
+    if (!quiet) Sfx.select();
+  }
+  inv.addEventListener('click', e => { const b = e.target.closest('.item'); if (b) showItem(b.dataset.id); });
+  inv.addEventListener('focusin', e => { const b = e.target.closest('.item'); if (b && b.getAttribute('aria-pressed') !== 'true') showItem(b.dataset.id, true); });
+  inv.addEventListener('pointerover', e => {
+    if (e.pointerType !== 'mouse') return;
+    const b = e.target.closest('.item'); if (b && b.getAttribute('aria-pressed') !== 'true') showItem(b.dataset.id, true);
+  });
+  showItem('python', true);
+ 
+  const FILTERS = [['all', 'All'], ['lang', 'Languages'], ['db', 'Databases'], ['tool', 'Tools'], ['net', 'Networking']];
+  filtersEl.innerHTML = FILTERS.map(([k, l], i) => `<button type="button" class="filter" data-f="${k}" data-sfx="none" aria-pressed="${i === 0}">${l}</button>`).join('');
+  filtersEl.addEventListener('click', e => {
+    const b = e.target.closest('.filter'); if (!b) return;
+    $$('.filter', filtersEl).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    $$('.item', inv).forEach(i => i.classList.toggle('dim', b.dataset.f !== 'all' && i.dataset.cat !== b.dataset.f));
+    Sfx.select();
+  });
+ 
+  /* =====================================================================
+     CONTACT: socials, copy handle, form
+     ===================================================================== */
+  const SOCIALS = [
+    { key: 'discordInvite', label: 'Discord server', ab: 'DC', c: '#9aa6ff' },
+    { key: 'github',        label: 'GitHub',         ab: 'GH', c: '#e1e6f0' },
+    { key: 'facebook',      label: 'Facebook',       ab: 'FB', c: '#6fb4ff' },
+    { key: 'email',         label: 'Email',          ab: '@',  c: '#ffd700' }
+  ];
+  $('#socials').innerHTML = SOCIALS.map(s => {
+    const href = s.key === 'email' ? (CONFIG.email ? `mailto:${CONFIG.email}` : '') : CONFIG.links[s.key];
+    if (!href) return '';
+    const ext = href.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return `<li><a class="slot tile" href="${href}"${ext} style="--c:${s.c}"><span class="ab">${s.ab}</span><span class="nm">${s.label}</span></a></li>`;
+  }).join('');
+ 
+  $('#handleText').textContent = CONFIG.discordHandle;
+  $('#copyHandle').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(CONFIG.discordHandle); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = CONFIG.discordHandle; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); } catch (_) {} t.remove();
+    }
+    Sfx.coin(); toast('Discord handle copied');
+  });
+ 
+  const form = $('#contactForm'), statusEl = $('#formStatus'), count = $('#count'), sendBtn = $('#sendBtn');
+  form.message.addEventListener('input', () => { count.textContent = `${form.message.value.length}/500`; });
+  function setStatus(msg, err) { statusEl.textContent = msg; statusEl.classList.toggle('err', !!err); }
+ 
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (form.company.value) return; // honeypot
+    const data = { name: form.name.value.trim(), contact: form.contact.value.trim(), topic: form.topic.value, message: form.message.value.trim() };
+    if (!data.name || !data.contact || !data.message) {
+      Sfx.error(); setStatus('Fill in your name, a way to reach you, and a message.', true);
+      (!data.name ? form.name : !data.contact ? form.contact : form.message).focus(); return;
+    }
+    sendBtn.disabled = true; setStatus('Sending...', false);
+    try {
+      if (CONFIG.formEndpoint) {
+        const res = await fetch(CONFIG.formEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
+        if (!res.ok) throw new Error('bad response');
+        form.reset(); count.textContent = '0/500'; setStatus('Message sent. I will reply soon.', false); Sfx.win(); toast('Message sent');
+      } else if (CONFIG.email) {
+        const body = `Name: ${data.name}\nContact: ${data.contact}\nTopic: ${data.topic}\n\n${data.message}`;
+        window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent('Portfolio message: ' + data.topic)}&body=${encodeURIComponent(body)}`;
+        setStatus('Opening your email app. Press send there to finish.', false); Sfx.select();
+      } else {
+        throw new Error('no destination');
+      }
+    } catch (err) {
+      Sfx.error(); setStatus('Could not send. Try the Discord handle or email on the left.', true);
+    } finally { sendBtn.disabled = false; }
+  });
+ 
+  $('#year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
+ 
